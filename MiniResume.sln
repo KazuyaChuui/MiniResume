@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniResume", "MiniResume\MiniResume.csproj", "{B436B6B4-8D74-420B-945C-1A88C9EA41AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B436B6B4-8D74-420B-945C-1A88C9EA41AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B436B6B4-8D74-420B-945C-1A88C9EA41AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B436B6B4-8D74-420B-945C-1A88C9EA41AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B436B6B4-8D74-420B-945C-1A88C9EA41AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
