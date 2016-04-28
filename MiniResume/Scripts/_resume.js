@@ -2,18 +2,19 @@
 var app = angular.module("resume", ["ngResource", "ngRoute"]);
 
 app.factory("trabajoService", function ($resource) {
-    return $resource('/api/trabajoes/:id',
-        { id: '@id' }, {
+    return $resource('/api/trabajos/:id',
+        { id: '@id' },
+        {
             update: { method: 'PUT' }
         });
 });
 
 app.factory("personaService", function ($resource) {
-    return $resource('/api/personas/:id',
-    { id: '@id' },
-    {
-        update: { method: 'PUT' }
-    });
+    return $resource('/api/Personas/:id',
+        { id: '@id' },
+        {
+            update: { method: 'PUT' }
+        });
 });
 
 app.controller("mainController", function ($scope) {
@@ -22,7 +23,18 @@ app.controller("mainController", function ($scope) {
 });
 
 app.controller("trabajoController", function ($scope, trabajoService) {
+    $scope.errors = [];
+    $scope.title = '';
 
+    $scope.errorMessage = function (response) {
+        var errors = [];
+        for (var key in response.data.ModelState) {
+            for (var i = 0; i < response.data.ModelState[key].length; i++) {
+                errors.push(response.data.ModelState[key][i]);
+            }
+        }
+        $scope.errors = errors;
+    };
 
     $scope.trabajoes = trabajoService.query();
 
@@ -34,34 +46,53 @@ app.controller("trabajoController", function ($scope, trabajoService) {
     };
 
     $scope.deleteTrabajo = function (trabajo) {
-        trabajoService.remove(trabajo, $scope.refreshData);
+        trabajoService.remove(trabajo, $scope.refreshData,$scope.errorMessage);
     };
 
     $scope.refreshData = function () {
         $scope.trabajoes = trabajoService.query();
+        $('#modal-dialog').modal('hide');
     };
 
     $scope.showAddDialog = function () {
+        $scope.clearErrors();
+        $scope.clearCurrentTrabajo();
+        $scope.title = 'Añadir trabajo';
         $('#modal-dialog').modal('show');
     };
 
+    $scope.shoUpdateDialog = function () {
+        $scope.clearErrors();
+        $scope.title = 'Actualizar trabajo';
+        $('#modal-dialog').modal('show');
+    };
+
+    $scope.selectTrabajo = function (trabajo) {
+        $scope.trabajo = trabajo;
+        $scope.showUpdateDialog();
+    };
+
     $scope.saveTrabajo = function () {
-        trabajoService.save($scope.trabajo, $scope.refreshData);
-        $('#modal-dialog').modal('hide');
+        if ($scope.trabajo.Id > 0) {
+            trabajoService.update($scope.trabajo, $scope.refreshData,$scope.errorMessage);
+        } else {
+            trabajoService.save($scope.trabajo, $scope.refreshData,$scope.errorMessage);
+
+        }
         $scope.clearCurrentTrabajo();
 
     };
-
+    $scope.clearErrors = function () {
+        $scope.errors = [];
+    };
     $scope.clearCurrentTrabajo = function () {
-        $scope.persona = {
+        $scope.trabajo = {
             Id: 0,
             Titulo: '',
             Fecha: '',
             PersonaId: 0
         };
     };
-
-
 });
 
 app.controller("personaController", function ($scope, personaService) {
@@ -89,7 +120,6 @@ app.controller("personaController", function ($scope, personaService) {
 
     $scope.selectPersona = function (prsn) {
         $scope.persona = prsn;
-        $scope.showAddDialog();
         $scope.showUpdateDialog();
     };
 
@@ -103,12 +133,13 @@ app.controller("personaController", function ($scope, personaService) {
     };
 
     $scope.showUpdateDialog = function () {
+        $scope.clearErrors();
         $scope.title = 'Actualizar Persona';
         $('#modal-dialog').modal('show');
     };
 
     $scope.showAddDialog = function () {
-        $scope.clearCurrentPersona;
+        $scope.clearCurrentPersona();
         $scope.clearErrors();
         $scope.title = 'Anadir Persona';
         $('#modal-dialog').modal('show');
@@ -124,11 +155,15 @@ app.controller("personaController", function ($scope, personaService) {
         } else {
             personaService.save($scope.persona, $scope.refreshData, $scope.errorMessage);
         }
-
+        $scope.clearCurrentPersona();
     };
 
     $scope.clearCurrentPersona = function () {
-        $scope.persona = { Id: 0, Name: '' };
+        $scope.persona = {
+            Id: 0,
+            Nombre: '',
+            Correo: ''
+        };
     };
 
 });

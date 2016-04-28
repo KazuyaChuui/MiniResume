@@ -14,7 +14,7 @@ namespace MiniResume.Models
         [Required]
         public string Titulo { get; set; }
         [Required]
-        public string Fecha { get; set; }
+        public DateTime Fecha { get; set; }
         public int PersonaId { get; set; }
 
         [ForeignKey("PersonaId")]
